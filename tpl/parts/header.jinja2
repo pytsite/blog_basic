@@ -1,0 +1,39 @@
+<nav class="navbar navbar-default">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                    data-target="#navbar-top-collapse" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="{{ base_url() }}" title="{{ t('app@app_name') }}">
+                <img height="20" src="{{ asset_url('img/appicon.png') }}" alt="Logo">
+            </a>
+            <a href="{{ base_url() }}" class="navbar-brand">{{ t('app@app_name') }}</a>
+        </div>
+
+        <div class="collapse navbar-collapse" id="navbar-top-collapse">
+            <ul class="nav navbar-nav">
+                {% for section in get_content_sections() %}
+                    {{ nav_link(ep_url('article_index_by_section', {'term_alias': section.alias}), section.title) }}
+                {% endfor %}
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                {{ language_nav[current_lang()] }}
+
+                {% set user = auth_current_user() %}
+                {% if user.is_anonymous %}
+                    {{ nav_link(auth_sign_in_url(), t('sign_in')) }}
+                {% else %}
+                    {% if user.has_permission('pytsite.admin.use') %}
+                        {{ nav_link(ep_url('pytsite.admin@dashboard'), t('pytsite.admin@admin')) }}
+                    {% endif %}
+                    {{ nav_link(user.url, t('profile')) }}
+                    {{ nav_link(auth_sign_out_url(), t('sign_out')) }}
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</nav>

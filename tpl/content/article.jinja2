@@ -1,0 +1,99 @@
+{% extends reg_get('output.base_tpl') %}
+{% block content %}
+    <div class="content-entity" data-model="{{ entity.model }}" data-entity-id="{{ entity.id }}">
+        <article class="article">
+            <h1 class="title">{{ entity.title | e }}</h1>
+
+            {% if entity.images %}
+                <div class="image">
+                    {{ entity.images[0].get_responsive_html(entity.title) }}
+                </div>
+            {% endif %}
+            {% block meta %}
+                <div class="meta">
+                    <span class="author">
+                        <i class="fa fa-user"></i>&nbsp;
+                        <a href="{{ ep_url('pytsite.content@index', {'model': 'article', 'author': entity.author.nickname}) }}">{{ entity.author.full_name }}</a>
+                    </span>
+                    <span class="date"><i
+                            class="fa fa-calendar"></i>&nbsp;{{ entity.publish_time | date('pretty_date_time') }}</span>
+                    <span class="views_count"><i class="fa fa-eye"></i>&nbsp;{{ entity.views_count }}</span>
+                    <span class="comments_count"><i class="fa fa-comment"></i>&nbsp;{{ entity.comments_count }}</span>
+                </div>
+            {% endblock %}
+
+            {% block description %}
+                <p class="description">
+                    {{ entity.description | e }}
+                </p>
+            {% endblock %}
+
+            <div class="body">
+                {{ entity.body }}
+            </div>
+        </article>
+
+        {% if entity.ext_links %}
+            <div class="ext-links">
+                <span>{{ t('external_links') }}</span>:
+                {% for link in entity.ext_links %}
+                    <a target="_blank" href="{{ link }}">{{ t('link')|lower }}</a>&nbsp;
+                {% endfor %}
+            </div>
+        {% endif %}
+
+
+        {% if entity.check_permissions('modify') %}
+            <div class="row actions">
+                <div class="col-xs-12 text-right">
+                    <a href="{{ entity.edit_url }}" class="btn btn-default">{{ t('edit') }}</a>
+                </div>
+            </div>
+        {% endif %}
+
+        <div class="row public-actions">
+            {% block tags %}
+                <div class="tags col-sm-6">
+                    {{ entity_tags }}
+                </div>
+            {% endblock %}
+
+            {% block share %}
+                {% if share_widget %}
+                    <div class="share col-sm-6">
+                        {{ share_widget }}
+                    </div>
+                {% endif %}
+            {% endblock %}
+        </div>
+
+        {% if related %}
+            <div class="row related">
+                <div class="col-xs-12">
+                    <h3>{{ t('recommended_articles') }}</h3>
+                </div>
+                {% for rel in related %}
+                    <div class="col-xs-B-12 col-xs-6 col-sm-4">
+                        <div class="image">
+                            {% if rel.images %}
+                                <div class="image">
+                                    <a href="{{ rel.url }}">
+                                        {{ rel.images[0].get_responsive_html(rel.title, aspect_ratio=1.5) }}
+                                    </a>
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <h4 class="title"><a href="{{ rel.url }}">{{ rel.title | e }}</a></h4>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        {% block comments %}
+            {% if comments_widget %}
+                {{ comments_widget }}
+            {% endif %}
+        {% endblock %}
+    </div>
+{% endblock %}

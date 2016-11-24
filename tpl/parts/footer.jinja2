@@ -1,0 +1,29 @@
+<div class="navbar navbar-bottom">
+    <div class="container">
+        <ul class="nav navbar-nav">
+            {% for link in settings_get('app.links', ()) %}
+                {% set icon = 'fa fa-globe' %}
+                {% if 'facebook.com' in link %}
+                    {% set icon = 'fa fa-facebook' %}
+                {% elif 'twitter.com' in link %}
+                    {% set icon = 'fa fa-twitter' %}
+                {% elif 'google.com' in link %}
+                    {% set icon = 'fa fa-google-plus' %}
+                {% elif 'tumblr.com' in link %}
+                    {% set icon = 'fa fa-tumblr' %}
+                {% endif %}
+                <li><a target="_blank" href="{{ link }}"><i class="{{ icon }}"></i></a></li>
+            {% endfor %}
+
+            <li><a href="mailto:{{ settings_get('mail.from') }}"><i class="fa fa-envelope"></i></a></li>
+
+            {% for page in get_content_pages() %}
+                {{ nav_link(page.url, page.title) }}
+            {% endfor %}
+        </ul>
+
+        <p class="navbar-text navbar-right">
+            <small>&copy; {{ '' | date('%Y') }} {{ t('app@app_name') }}</small>
+        </p>
+    </div>
+</div>

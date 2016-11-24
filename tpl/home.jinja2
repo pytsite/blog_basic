@@ -1,0 +1,71 @@
+{% extends reg_get('output.base_tpl') %}
+{% block content %}
+    <div id="home">
+        {% if latest_articles|length >= 1 %}
+            {% set article = latest_articles[0] %}
+            <div class="row headline">
+                <div class="col-xs-12 art primary">
+                    <div class="inner">
+                        <a class="image" href="{{ article.url }}">
+                            {{ article.images[0].get_responsive_html(article.title) }}
+                        </a>
+
+                        <div class="title">
+                            <h3><a href="{{ article.url }}">{{ article.title | e }}</a></h3>
+
+                            <p class="hidden-xs description">{{ article.description | e }}</p>
+                        </div>
+
+                        <a class="section hvr-sweep-to-right" href="{{ ep_url('article_index_by_section', {'term_alias': article.section.alias}) }}">{{ article.section.title | e }}</a>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+                {% for n in range(1, 5) %}
+                    {% if latest_articles[n] %}
+                        {% set article = latest_articles[n] %}
+                        <div class="col-xs-B-12 col-xs-6 art secondary">
+                            <div class="inner">
+                                <a class="image" href="{{ article.url }}">
+                                    {{ article.images[0].get_responsive_html(article.title, aspect_ratio=1.5) }}
+                                </a>
+                                <a class="section hvr-sweep-to-right" href="{{ ep_url('article_index_by_section', {'term_alias': article.section.alias}) }}">{{ article.section.title | e }}</a>
+
+                                <p class="title"><a href="{{ article.url }}">{{ article.title | e }}</a></p>
+                            </div>
+                        </div>
+                        {% if loop.index is even %}
+                            <div class="clearfix"></div>
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <div class="row latest-by-section">
+            {% for section in sections %}
+                {% if loop.index0 < 3 %}
+                    {% if latest_by_section[section.alias] %}
+                        <div class="col-xs-B-12 col-xs-4">
+                            <h3 class="section-title">{{ section.title | e }}</h3>
+
+                            {% for article in latest_by_section[section.alias] %}
+                                <div class="art">
+                                    {% if loop.index0 == 0 or loop.index0 == 2 %}
+                                        <a class="image" href="{{ article.url }}">
+                                            {{ article.images[0].get_responsive_html(article.title, aspect_ratio=2) }}
+                                        </a>
+                                        <h4 class="title"><a href="{{ article.url }}">{{ article.title | e }}</a></h4>
+                                    {% else %}
+                                        <div class="title">
+                                            <a href="{{ article.url }}">{{ article.title | e }}</a>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

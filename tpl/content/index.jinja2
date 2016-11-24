@@ -1,0 +1,50 @@
+{% extends reg_get('output.base_tpl') %}
+
+{% block content %}
+    <div class="index">
+        <h1>{{ metatag_get('title') }}</h1>
+
+        {% if author_widget %}
+            {{ author_widget }}
+        {% endif %}
+
+        {% if entities %}
+            {% for entity in entities %}
+                <div class="article">
+                    <div class="row">
+                        {% if entity.images %}
+                            <div class="image col-xs-B-12 col-xs-4">
+                                <a href="{{ entity.url }}">
+                                    {{ entity.images[0].get_responsive_html(entity.title) }}
+                                </a>
+                            </div>
+                        {% endif %}
+                        <div class="col-xs-B-12{% if entity.images %} col-xs-8{% endif %}">
+                            <h3 class="title"><a href="{{ entity.url }}">{{ entity.title | e }}</a></h3>
+
+                            <div class="meta">
+                                <div class="meta">
+                                    <span class="author">
+                                        <i class="fa fa-user"></i>&nbsp;
+                                        <a href="{{ ep_url('pytsite.content@index', {'model': 'article', 'author': entity.author.nickname}) }}">{{ entity.author.full_name }}</a>
+                                    </span>
+                                    <span class="date"><i class="fa fa-calendar"></i>&nbsp;{{ entity.publish_time | date('pretty_date_time') }}</span>
+                                    <span class="views_count"><i
+                                            class="fa fa-eye"></i>&nbsp;{{ entity.views_count }}</span>
+                                    <span class="comments_count"><i
+                                            class="fa fa-comment"></i>&nbsp;{{ entity.comments_count }}</span>
+                                </div>
+                            </div>
+                            <p class="description">{{ entity.description | e }}</p>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+
+            {{ pager }}
+        {% else %}
+            <p>{{ t('no_content_found') }}</p>
+        {% endif %}
+
+    </div>
+{% endblock %}
