@@ -1,7 +1,10 @@
 # PytSite Blog Default Theme Changelog
 
+## 0.2.3 (2016-12-22)
+Previously removed files restored.
+
 ## 0.2.2 (2016-12-22)
-Removed cached files.
+Cached files removed.
 
 ## 0.2.1 (2016-12-22)
 - .gitignore updated.
