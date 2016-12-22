@@ -5,7 +5,7 @@
 
             {% for art in sidebar[title] %}
                 <div class="art">
-                    {% if not loop.index0 and art.images %}
+                    {% if art.images %}
                         <div class="image">
                             <a href="{{ art.url }}">
                                 {{ art.images[0].get_responsive_html(art.title) }}
@@ -31,13 +31,15 @@
     {% endif %}
 {% endmacro %}
 
-<div class="block search">
-    {{ search_input[current_lang()] }}
-</div>
-
 <div class="row">
     {{ sidebar_block('popular', 'col-xs-B-12 col-xs-6 col-md-12') }}
     {{ sidebar_block('latest', 'col-xs-B-12 col-xs-6 col-md-12') }}
 </div>
 
 {{ sidebar['tag_cloud'] }}
+
+{% if sidebar['content_digest_subscribe'] %}
+    <div class="block">
+        {{ sidebar['content_digest_subscribe'] }}
+    </div>
+{% endif %}

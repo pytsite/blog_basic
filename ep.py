@@ -2,6 +2,7 @@
 """
 from datetime import datetime, timedelta
 from pytsite import content, tpl, odm, lang, settings, comments, auth, plugman
+from app import model
 
 __author__ = 'Alexander Shepetko'
 __email__ = 'a@shepetko.com'
@@ -13,12 +14,12 @@ def home(args: dict, inp: dict) -> str:
     """
     exclude_ids = []
 
-    latest = _get_articles(exclude_ids)
+    latest = _get_articles(exclude_ids, 3)
 
     sections = list(content.get_sections())
     latest_by_section = {}
     for sec in sections:
-        latest_by_section[sec.alias] = _get_articles(exclude_ids, section=sec)
+        latest_by_section[sec.alias] = _get_articles(exclude_ids, 4, section=sec)
 
     args.update({
         'sections': sections,
@@ -33,6 +34,8 @@ def home(args: dict, inp: dict) -> str:
 def content_article_index(args: dict, inp: dict) -> str:
     """Index of articles.
     """
+    args.update(content.paginate(args['finder']))
+
     exclude_ids = [e.id for e in args.get('entities')]
     args.update({
         'sidebar': _get_sidebar(exclude_ids),
@@ -90,29 +93,36 @@ def _get_sidebar(exclude_ids: list) -> list:
         ),
     }
 
+    if plugman.is_installed('content_digest'):
+        from plugins import content_digest
+        r['content_digest_subscribe'] = content_digest.widget.Subscribe()
+
     return r
 
 
-def _get_articles(exclude_ids: list, count: int = 5, section: content.model.Section = None,
-                  sort_field: str = 'publish_time', days: int = None, starred: bool = False):
+def _get_articles(exclude_ids: list, count: int = 6, section: content.model.Section = None,
+                  sort_field: str = 'publish_time', days: int = None, starred: bool = False) -> list:
     """Get articles.
-
-    :rtype: list
     """
     # Setup articles finder
-    f = content.find('article').where('_id', 'nin', exclude_ids).sort([(sort_field, odm.I_DESC)])
+    f = content.find('article').ninc('_id', exclude_ids).sort([(sort_field, odm.I_DESC)])
 
     # Filter by section
     if section:
-        f.where('section', '=', section)
+        f.eq('section', section)
 
     # Filter by publish time
     if days:
-        f.where('publish_time', '>=', datetime.now() - timedelta(days))
+        # Determine last published article date
+        last_article = content.find('article').sort([('publish_time', odm.I_DESC)]).first()  # type: model.Article
+        if last_article:
+            f.gte('publish_time', last_article.publish_time - timedelta(days))
+        else:
+            f.gte('publish_time', datetime.now() - timedelta(days))
 
     # Filter by 'starred' flag
     if starred:
-        f.where('starred', '=', True)
+        f.eq('starred', True)
 
     r = []
     for article in f.get(count):

@@ -1,6 +1,6 @@
 <div class="navbar navbar-bottom">
     <div class="container">
-        <ul class="nav navbar-nav">
+        <ul class="links nav navbar-nav">
             {% for link in settings_get('app.links', ()) %}
                 {% set icon = 'fa fa-globe' %}
                 {% if 'facebook.com' in link %}
@@ -17,13 +17,26 @@
 
             <li><a href="mailto:{{ settings_get('mail.from') }}"><i class="fa fa-envelope"></i></a></li>
 
-            {% for page in get_content_pages() %}
+            {% for page in content_pages() %}
                 {{ nav_link(page.url, page.title) }}
             {% endfor %}
         </ul>
 
-        <p class="navbar-text navbar-right">
+        <p class="navbar-text navbar-right text-xs-B-center text-sm-left">
             <small>&copy; {{ '' | date('%Y') }} {{ t('app@app_name') }}</small>
         </p>
+
+        <ul class="actions nav navbar-nav navbar-right text-xs-B-center text-sm-left">
+            {% set user = auth_current_user() %}
+            {% if user.is_anonymous %}
+                {{ nav_link(auth_sign_in_url(), t('sign_in')) }}
+            {% else %}
+                {% if user.has_permission('pytsite.admin.use') %}
+                    {{ nav_link(ep_url('pytsite.admin@dashboard'), t('pytsite.admin@admin')) }}
+                {% endif %}
+                {{ nav_link(user.url, t('profile')) }}
+                {{ nav_link(auth_sign_out_url(), t('sign_out')) }}
+            {% endif %}
+        </ul>
     </div>
 </div>

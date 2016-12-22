@@ -1,19 +1,18 @@
-{% do add_lib('bootstrap') %}
-{% do add_asset('css/common.css') %}
-{% do add_asset('js/common.js') %}
-
 <!DOCTYPE html>
 <html lang="{{ current_lang() }}">
+
 <head>
-    {{ metatags() }}
-    {{ css_links() }}
+    {% block metatags %} {{ metatags() }} {% endblock %}
+    {% block css_links %} {{ css_links() }} {% endblock %}
 </head>
+
 <body class="application">
 
 {% include 'parts/header' %}
 
 <div id="page" class="container">
     {% include 'parts/messages' %}
+
     <div class="row">
         <div id="content" class="{% if sidebar %}col-md-8{% else %}col-xs-12{% endif %}">
             <div class="inner">
@@ -34,8 +33,8 @@
 
 {% include 'parts/footer' %}
 
-{{ js_links() }}
-{{ inline_js() }}
+{% block js_links %} {{ js_links() }} {% endblock %}
+{% block inline_js %} {{ inline_js() }} {% endblock %}
 
 </body>
 </html>
