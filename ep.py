@@ -83,8 +83,8 @@ def _get_sidebar(exclude_ids: list) -> list:
     """Get sidebar content.
     """
     r = {
-        'popular': _get_articles(exclude_ids, 3, sort_field='views_count', days=7),
-        'latest': _get_articles(exclude_ids, 3, days=7),
+        'popular': _get_articles(exclude_ids, 3, sort_field='views_count', days=30),
+        'latest': _get_articles(exclude_ids, 3, days=30),
         'tag_cloud': content.widget.TagCloud(
             uid='sidebar-tag-cloud',
             title=lang.t('tags_cloud'),
