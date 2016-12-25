@@ -61,6 +61,9 @@
                             </a>
                             <h4 class="title"><a href="{{ article.url }}">{{ article.title | e }}</a></h4>
                         </div>
+                        {% if loop.index0 % 2 %}
+                            <div class="clearfix"></div>
+                        {% endif %}
                     {% endfor %}
                 </div>
             {% endif %}

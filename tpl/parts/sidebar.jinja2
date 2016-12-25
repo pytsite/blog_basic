@@ -1,20 +1,21 @@
 {% macro sidebar_block(title, cls='') %}
     {% if sidebar[title] %}
-        <div class="block {{ title }} {{ cls }}">
-            <h3>{{ t(title) | e }}</h3>
+        <div class="row">
+            <div class="block {{ title }} {{ cls }}">
+                <h3>{{ t(title) | e }}</h3>
 
-            {% for art in sidebar[title] %}
-                <div class="art">
-                    {% if art.images %}
-                        <div class="image">
-                            <a href="{{ art.url }}">
-                                {{ art.images[0].get_responsive_html(art.title) }}
-                            </a>
-                        </div>
-                    {% endif %}
-                    <h4><a href="{{ art.url }}">{{ art.title | e }}</a></h4>
+                {% for art in sidebar[title] %}
+                    <div class="art">
+                        {% if art.images %}
+                            <div class="image">
+                                <a href="{{ art.url }}">
+                                    {{ art.images[0].get_responsive_html(art.title) }}
+                                </a>
+                            </div>
+                        {% endif %}
+                        <h4><a href="{{ art.url }}">{{ art.title | e }}</a></h4>
 
-                    <div class="meta">
+                        <div class="meta">
                         <span class="author">
                             <i class="fa fa-user"></i>&nbsp;
                             <a href="{{ ep_url('pytsite.content@index', {'model': 'article', 'author': art.author.nickname}) }}">{{ art.author.full_name }}</a>
@@ -23,18 +24,18 @@
                             <i class="fa fa-calendar"></i>&nbsp;
                             {{ art.publish_time | date('pretty_date_time') }}
                         </span>
+                        </div>
+                        <p class="description">{{ art.description | e }}</p>
                     </div>
-                    <p class="description">{{ art.description | e }}</p>
-                </div>
-            {% endfor %}
+                {% endfor %}
+            </div>
         </div>
     {% endif %}
 {% endmacro %}
 
-<div class="row">
-    {{ sidebar_block('popular', 'col-xs-B-12 col-xs-6 col-md-12') }}
-    {{ sidebar_block('latest', 'col-xs-B-12 col-xs-6 col-md-12') }}
-</div>
+{{ sidebar_block('popular', 'col-xs-B-12 col-xs-6 col-md-12') }}
+
+{{ sidebar_block('latest', 'col-xs-B-12 col-xs-6 col-md-12') }}
 
 {{ sidebar['tag_cloud'] }}
 

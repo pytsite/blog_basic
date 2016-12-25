@@ -1,5 +1,8 @@
 # PytSite Blog Default Theme Changelog
 
+## 0.3 (2016-12-25)
+Slightly restyled and got settings management.
+
 ## 0.2.3 (2016-12-22)
 Previously removed files restored.
 
