@@ -9,7 +9,7 @@ __license__ = 'MIT'
 default_colors = ['#ffffff', '#e6e6e6', '#ff7148', '#263248', '#333333']
 
 
-def on_assetman_build_before():
+def on_assetman_build_before(console_notify: bool):
     s = theme.get_theme_settings(__name__)
 
     for n in range(1, 6):

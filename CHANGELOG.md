@@ -1,5 +1,8 @@
 # PytSite Blog Default Theme Changelog
 
+## 0.4 (2017-01-08)
+Update to support latest PytSite 0.98.35 release.
+
 ## 0.3.1 (2016-12-25)
 Fixed language global `app_name` usage.
 

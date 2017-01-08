@@ -1,7 +1,8 @@
 """PytSite Blog Default Theme Endpoints.
 """
 from datetime import datetime, timedelta
-from pytsite import content, tpl, odm, lang, settings, comments, auth, plugman
+from pytsite import tpl, odm, lang, settings, auth, plugman
+from plugins import content, section, tag, comments
 from app import model
 
 __author__ = 'Alexander Shepetko'
@@ -16,10 +17,10 @@ def home(args: dict, inp: dict) -> str:
 
     latest = _get_articles(exclude_ids, 3)
 
-    sections = list(content.get_sections())
+    sections = list(section.get())
     latest_by_section = {}
     for sec in sections:
-        latest_by_section[sec.alias] = _get_articles(exclude_ids, 4, section=sec)
+        latest_by_section[sec.alias] = _get_articles(exclude_ids, 4, sec=sec)
 
     args.update({
         'sections': sections,
@@ -55,7 +56,7 @@ def content_article_view(args: dict, inp: dict) -> str:
 
     args.update({
         'related': _get_articles(exclude_ids, 3, e.section, 'views_count') if e.model == 'article' else [],
-        'entity_tags': content.widget.EntityTagCloud('entity-tag-cloud', entity=args['entity']),
+        'entity_tags': tag.widget.EntityTagCloud('entity-tag-cloud', entity=args['entity']),
         'sidebar': _get_sidebar(exclude_ids),
     })
 
@@ -85,7 +86,7 @@ def _get_sidebar(exclude_ids: list) -> list:
     r = {
         'popular': _get_articles(exclude_ids, 3, sort_field='views_count', days=30),
         'latest': _get_articles(exclude_ids, 3, days=30),
-        'tag_cloud': content.widget.TagCloud(
+        'tag_cloud': tag.widget.TagCloud(
             uid='sidebar-tag-cloud',
             title=lang.t('tags_cloud'),
             css='block',
@@ -100,7 +101,7 @@ def _get_sidebar(exclude_ids: list) -> list:
     return r
 
 
-def _get_articles(exclude_ids: list, count: int = 6, section: content.model.Section = None,
+def _get_articles(exclude_ids: list, count: int = 6, sec: section.model.Section = None,
                   sort_field: str = 'publish_time', days: int = None, starred: bool = False) -> list:
     """Get articles.
     """
@@ -108,8 +109,8 @@ def _get_articles(exclude_ids: list, count: int = 6, section: content.model.Sect
     f = content.find('article').ninc('_id', exclude_ids).sort([(sort_field, odm.I_DESC)])
 
     # Filter by section
-    if section:
-        f.eq('section', section)
+    if sec:
+        f.eq('section', sec)
 
     # Filter by publish time
     if days:
