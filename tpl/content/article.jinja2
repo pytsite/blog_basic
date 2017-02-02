@@ -47,7 +47,7 @@
         {% if entity.check_permissions('modify') %}
             <div class="row actions">
                 <div class="col-xs-12 text-right">
-                    <a href="{{ entity.edit_url }}" class="btn btn-default">{{ t('edit') }}</a>
+                    <a href="{{ entity.modify_url }}" class="btn btn-default">{{ t('edit') }}</a>
                 </div>
             </div>
         {% endif %}
