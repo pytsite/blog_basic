@@ -18,7 +18,7 @@ def on_assetman_build_before(console_notify: bool):
 
 
 def get_settings_widgets():
-    r = list()
+    r = []
 
     for n in range(1, 6):
         r.append(widget.select.ColorPicker(

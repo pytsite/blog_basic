@@ -1,6 +1,6 @@
 {
-  "name": "Default Blog Theme",
-  "description": "Default theme for PytSite blog",
+  "name": "blog_default",
+  "description": "Default Blog",
   "author": "Alexander Shepetko <a@shepetko.com>",
   "url": "https://pytsite.xyz"
 }

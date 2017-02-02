@@ -1,5 +1,8 @@
 # PytSite Blog Default Theme Changelog
 
+## 0.4.1 (2017-02-02)
+theme.json updated.
+
 ## 0.4 (2017-01-08)
 Update to support latest PytSite 0.98.35 release.
 
