@@ -128,7 +128,7 @@ def _get_articles(exclude_ids: list, count: int = 6, sec: section.model.Section 
     r = []
     for article in f.get(count):
         # Show only articles which can be viewed by current user
-        if article.check_permissions('view'):
+        if article.odm_auth_check_permission('view') or article.odm_auth_check_permission('view_own'):
             r.append(article)
         exclude_ids.append(article.id)
 

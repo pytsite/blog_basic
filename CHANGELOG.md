@@ -1,5 +1,10 @@
 # PytSite Blog Default Theme Changelog
 
+
+## 0.5 (2017-02-07)
+Update to support latest PytSite 0.98.58 release.
+
+
 ## 0.4.2 (2017-02-02)
 Fixed 'Edit' button href in article view template.
 

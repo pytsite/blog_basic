@@ -44,7 +44,7 @@
         {% endif %}
 
 
-        {% if entity.check_permissions('modify') %}
+        {% if entity.odm_auth_check_permission('modify') or entity.odm_auth_check_permission('modify_own')  %}
             <div class="row actions">
                 <div class="col-xs-12 text-right">
                     <a href="{{ entity.modify_url }}" class="btn btn-default">{{ t('edit') }}</a>
