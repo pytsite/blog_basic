@@ -1,4 +1,4 @@
-"""PytSite Blog Default Theme.
+"""PytSite Blog Default Theme
 """
 from pytsite import tpl, widget, browser, assetman, lang, events, theme
 

@@ -2,19 +2,21 @@
     <div class="container">
         <ul class="links nav navbar-nav">
             {% for link in settings_get('app.links', ()) %}
-                {% set icon = 'fa fa-globe' %}
+                {% set icon = 'globe' %}
                 {% if 'facebook.com' in link %}
-                    {% set icon = 'fa fa-facebook' %}
+                    {% set icon = 'facebook' %}
                 {% elif 'twitter.com' in link %}
-                    {% set icon = 'fa fa-twitter' %}
+                    {% set icon = 'twitter' %}
                 {% elif 'google.com' in link %}
-                    {% set icon = 'fa fa-google-plus' %}
+                    {% set icon = 'google-plus' %}
                 {% elif 'tumblr.com' in link %}
-                    {% set icon = 'fa fa-tumblr' %}
+                    {% set icon = 'tumblr' %}
+                {% elif 'instagram.com' in link %}
+                    {% set icon = 'instagram' %}
                 {% elif 'vk.com' in link %}
-                    {% set icon = 'fa fa-vk' %}
+                    {% set icon = 'vk' %}
                 {% endif %}
-                <li><a target="_blank" href="{{ link }}"><i class="{{ icon }}"></i></a></li>
+                <li><a target="_blank" href="{{ link }}"><i class="fa fa-fw fa-{{ icon }}"></i></a></li>
             {% endfor %}
 
             <li><a href="mailto:{{ settings_get('mail.from') }}"><i class="fa fa-envelope"></i></a></li>
