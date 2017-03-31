@@ -9,14 +9,14 @@ __license__ = 'MIT'
 default_colors = ['#ffffff', '#e6e6e6', '#ff7148', '#263248', '#333333']
 
 
-def on_assetman_build_before(console_notify: bool):
+def on_assetman_build_before():
     """Handler of event 'pytsite.assetman.build.before'
     """
-    s = theme.get_theme_settings(__name__)
-
+    s = theme.get(__name__).settings
     for n in range(1, 6):
-        k = 'color{}'.format(n)
-        assetman.register_global(k, s.get(k, default_colors[n - 1]), True)
+        setting_k = 'color{}'.format(n)
+        global_k = 'blog-default-color-{}'.format(n)
+        assetman.register_global(global_k, s.get(setting_k, default_colors[n - 1]), True)
 
 
 def get_settings_widgets():

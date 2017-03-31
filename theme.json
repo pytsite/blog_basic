@@ -1,6 +1,6 @@
 {
-  "name": "blog_default",
   "description": "Default Blog",
   "author": "Alexander Shepetko <a@shepetko.com>",
-  "url": "https://pytsite.xyz"
+  "url": "https://pytsite.xyz",
+  "version": "0.6.1"
 }

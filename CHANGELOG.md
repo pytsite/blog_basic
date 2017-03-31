@@ -1,5 +1,10 @@
 # PytSite Blog Default Theme Changelog
 
+
+## 0.7 (2017-03-31)
+Update to support latest PytSite 0.98.92 release.
+
+
 ## 0.6.1 (2017-03-06)
 Support for Instagram's icon in footer
 
