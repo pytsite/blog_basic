@@ -1,5 +1,6 @@
 """PytSite Blog Default Theme Endpoints.
 """
+from typing import Dict as _Dict
 from datetime import datetime, timedelta
 from pytsite import tpl, odm, lang, settings, auth, plugman
 from plugins import content, section, tag, comments
@@ -10,7 +11,7 @@ __email__ = 'a@shepetko.com'
 __license__ = 'MIT'
 
 
-def home(args: dict, inp: dict) -> str:
+def home() -> str:
     """Home.
     """
     exclude_ids = []
@@ -22,65 +23,66 @@ def home(args: dict, inp: dict) -> str:
     for sec in sections:
         latest_by_section[sec.alias] = _get_articles(exclude_ids, 4, sec=sec)
 
-    args.update({
+    tpl_args = {
         'sections': sections,
         'latest_articles': latest,
         'latest_by_section': latest_by_section,
         'sidebar': _get_sidebar(exclude_ids),
-    })
+    }
 
-    return tpl.render('$theme@home', args)
+    return tpl.render('$theme@home', tpl_args)
 
 
-def content_article_index(args: dict, inp: dict) -> str:
+def content_article_index(**kwargs) -> str:
     """Index of articles.
     """
-    args.update(content.paginate(args['finder']))
+    kwargs.update(content.paginate(kwargs['finder']))
 
-    exclude_ids = [e.id for e in args.get('entities')]
-    args.update({
+    exclude_ids = [e.id for e in kwargs.get('entities')]
+    kwargs.update({
         'sidebar': _get_sidebar(exclude_ids),
     })
 
-    if 'author' in args and args['author']:
-        args['author_widget'] = auth.widget.Profile('user-profile', user=args['author'])
+    author = kwargs.get('author')
+    if author:
+        kwargs['author_widget'] = auth.widget.Profile('user-profile', user=author)
 
-    return tpl.render('$theme@content/index', args)
+    return tpl.render('$theme@content/index', kwargs)
 
 
-def content_article_view(args: dict, inp: dict) -> str:
+def content_article_view(**kwargs) -> str:
     """Single article view.
     """
-    e = args['entity']
+    e = kwargs['entity']
     exclude_ids = [e.id]
 
-    args.update({
+    kwargs.update({
         'related': _get_articles(exclude_ids, 3, e.section, 'views_count') if e.model == 'article' else [],
-        'entity_tags': tag.widget.EntityTagCloud('entity-tag-cloud', entity=args['entity']),
+        'entity_tags': tag.widget.EntityTagCloud('entity-tag-cloud', entity=kwargs.get('entity')),
         'sidebar': _get_sidebar(exclude_ids),
     })
 
     if plugman.is_installed('addthis'):
         from plugins import addthis
-        args.update({
+        kwargs.update({
             'share_widget': addthis.widget.AddThis('add-this-share') if settings.get('addthis.pub_id') else '',
         })
 
     if plugman.is_installed('disqus'):
-        args.update({
+        kwargs.update({
             'comments_widget': comments.get_widget(driver_name='disqus')
         })
 
-    return tpl.render('content/{}'.format(e.model), args)
+    return tpl.render('content/{}'.format(e.model), kwargs)
 
 
-def content_page_view(args: dict, inp: dict) -> str:
+def content_page_view(**kwargs) -> str:
     """Single Page view.
     """
-    return content_article_view(args, inp)
+    return content_article_view(**kwargs)
 
 
-def _get_sidebar(exclude_ids: list) -> list:
+def _get_sidebar(exclude_ids: list) -> _Dict:
     """Get sidebar content.
     """
     r = {

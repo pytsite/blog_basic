@@ -1,50 +1,53 @@
 """PytSite Blog Default Theme
 """
-from pytsite import tpl, widget, browser, assetman, lang, events, theme
+from pytsite import tpl, widget, assetman, plugman, router
 
 __author__ = 'Alexander Shepetko'
 __email__ = 'a@shepetko.com'
 __license__ = 'MIT'
 
-default_colors = ['#ffffff', '#e6e6e6', '#ff7148', '#263248', '#333333']
+# Assetman tasks
+assetman.t_js('**')
+assetman.t_copy_static('**')
+assetman.t_less('**')
 
-
-def on_assetman_build_before():
-    """Handler of event 'pytsite.assetman.build.before'
-    """
-    s = theme.get(__name__).settings
-    for n in range(1, 6):
-        setting_k = 'color{}'.format(n)
-        global_k = 'blog-default-color-{}'.format(n)
-        assetman.register_global(global_k, s.get(setting_k, default_colors[n - 1]), True)
-
-
-def get_settings_widgets():
-    """Theme hook
-    """
-    r = []
-
-    for n in range(1, 6):
-        r.append(widget.select.ColorPicker(
-            uid='color{}'.format(n),
-            label=lang.t(__name__ + '@color_{}'.format(n)),
-            default=default_colors[n - 1],
-            h_size='col-xs-12 col-sm-2 col-lg-1',
-        ))
-
-    return r
-
-
-# Resources
-browser.include('bootstrap', True)
-assetman.add('css/common.css', True)
-assetman.add('js/common.js', True)
-
-# Event listeners
-events.listen('pytsite.assetman.build.before', on_assetman_build_before)
+# Assets preload
+assetman.preload('twitter-bootstrap', True)
+assetman.preload('font-awesome', True)
+assetman.preload('css/common.css', True)
+assetman.preload('js/index.js', True)
 
 # Template globals
-tpl_global = {
-    'language_nav': lambda: widget.select.LanguageNav('language-nav', css='navbar-right', dropdown=True),
-}
-tpl.register_global('theme_blog_default', tpl_global)
+tpl.register_global('language_nav',
+                    lambda: widget.select.LanguageNav('language-nav', css='navbar-right', dropdown=True))
+
+if plugman.is_installed('content'):
+    from plugins import content
+
+    if plugman.is_installed('article'):
+        # 'Article index by section' route
+        router.handle('/section/<term_alias>', 'content@index', 'article_index_by_section', {
+            'model': 'article',
+            'term_field': 'section',
+        })
+
+        # 'Article index' by tag route
+        router.handle('/tag/<term_alias>', 'content@index', 'article_index_by_tag', {
+            'model': 'article',
+            'term_field': 'tags',
+        })
+
+        # 'Article index by author' route
+        router.handle('/author/<author>', 'content@index', 'article_index_by_author', {
+            'model': 'article',
+        })
+
+    if plugman.is_installed('page'):
+        # Tpl globals
+        tpl.register_global('content_pages', lambda: list(content.find('page').get()))
+
+    if plugman.is_installed('section'):
+        from plugins import section
+
+        # Tpl globals
+        tpl.register_global('content_sections', lambda: list(section.get()))
