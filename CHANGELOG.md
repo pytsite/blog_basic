@@ -1,6 +1,10 @@
 # PytSite Blog Default Theme Changelog
 
 
+## 0.9 (2017-05-26)
+Update to support latest PytSite 0.99.13 release.
+
+
 ## 0.8 (2017-05-06)
 Update to support latest PytSite 0.99.13 release.
 
