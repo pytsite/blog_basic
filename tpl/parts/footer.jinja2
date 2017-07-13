@@ -36,7 +36,7 @@
                 {{ nav_link(auth_sign_in_url(), t('sign_in')) }}
             {% else %}
                 {% if user.has_permission('pytsite.admin.use') %}
-                    {{ nav_link(ep_url('pytsite.admin@dashboard'), t('pytsite.admin@admin')) }}
+                    {{ nav_link(rule_url('pytsite.admin@dashboard'), t('pytsite.admin@admin')) }}
                 {% endif %}
                 {{ nav_link(user.url, t('profile')) }}
                 {{ nav_link(auth_sign_out_url(), t('sign_out')) }}

@@ -18,7 +18,7 @@
             <ul class="nav navbar-nav">
                 {% for section in content_sections() %}
                     {% if loop.index < 10 %}
-                        {{ nav_link(ep_url('article_index_by_section', {'term_alias': section.alias}), section.title) }}
+                        {{ nav_link(rule_url('article_index_by_section', {'term_alias': section.alias}), section.title) }}
                     {% endif %}
                 {% endfor %}
             </ul>

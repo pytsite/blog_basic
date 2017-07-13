@@ -26,7 +26,7 @@
                                 <div class="meta">
                                     <span class="author">
                                         <i class="fa fa-user"></i>&nbsp;
-                                        <a href="{{ ep_url('article_index_by_author', {'author': entity.author.nickname}) }}">{{ entity.author.full_name }}</a>
+                                        <a href="{{ rule_url('article_index_by_author', {'author': entity.author.nickname}) }}">{{ entity.author.full_name }}</a>
                                     </span>
                                     <span class="date"><i class="fa fa-calendar"></i>&nbsp;{{ entity.publish_time | date('pretty_date_time') }}</span>
                                     <span class="views_count"><i

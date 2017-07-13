@@ -1,53 +1,58 @@
-"""PytSite Blog Default Theme
+"""Orange Theme for PytSite Blog Application
 """
-from pytsite import tpl, widget, assetman, plugman, router
+from pytsite import pkg_util, tpl, widget, assetman, plugman, router
 
 __author__ = 'Alexander Shepetko'
 __email__ = 'a@shepetko.com'
 __license__ = 'MIT'
+
+# Check for Blog application presence
+if pkg_util.name('app') != 'blog':
+    raise RuntimeError('This theme is able to work only with PytSite Blog application. '
+                       'See https://github.com/pytsite/blog for details.')
 
 # Assetman tasks
 assetman.t_js('**')
 assetman.t_copy_static('**')
 assetman.t_less('**')
 
-# Assets preload
+# Preload permanent assets
 assetman.preload('twitter-bootstrap', True)
 assetman.preload('font-awesome', True)
 assetman.preload('css/common.css', True)
 assetman.preload('js/index.js', True)
 
-# Template globals
+# Register template globals
 tpl.register_global('language_nav',
                     lambda: widget.select.LanguageNav('language-nav', css='navbar-right', dropdown=True))
 
-if plugman.is_installed('content'):
-    from plugins import content
+if plugman.is_installed(['content', 'section', 'article', 'page']):
+    from plugins import content, section
+    from . import controllers
 
-    if plugman.is_installed('article'):
-        # 'Article index by section' route
-        router.handle('/section/<term_alias>', 'content@index', 'article_index_by_section', {
-            'model': 'article',
-            'term_field': 'section',
-        })
+    router.handle(controllers.Home(), '/', 'home')
 
-        # 'Article index' by tag route
-        router.handle('/tag/<term_alias>', 'content@index', 'article_index_by_tag', {
-            'model': 'article',
-            'term_field': 'tags',
-        })
+    # These two routes needed by 'article' plugin as final point while processing request
+    router.handle(controllers.ContentEntityIndex(), name='content_entity_index')
+    router.handle(controllers.ContentEntityView(), name='content_entity_view')
 
-        # 'Article index by author' route
-        router.handle('/author/<author>', 'content@index', 'article_index_by_author', {
-            'model': 'article',
-        })
+    # "Article index by section" route
+    router.handle('content@index', '/section/<term_alias>', 'article_index_by_section', {
+        'model': 'article',
+        'term_field': 'section',
+    })
 
-    if plugman.is_installed('page'):
-        # Tpl globals
-        tpl.register_global('content_pages', lambda: list(content.find('page').get()))
+    # "Article index by tag" route
+    router.handle('content@index', '/tag/<term_alias>', 'article_index_by_tag', {
+        'model': 'article',
+        'term_field': 'tags',
+    })
 
-    if plugman.is_installed('section'):
-        from plugins import section
+    # "Article index by author" route
+    router.handle('content@index', '/author/<author>', 'article_index_by_author', {
+        'model': 'article',
+    })
 
-        # Tpl globals
-        tpl.register_global('content_sections', lambda: list(section.get()))
+    # Template globals
+    tpl.register_global('content_pages', lambda: list(content.find('page').get()))
+    tpl.register_global('content_sections', lambda: list(section.get()))

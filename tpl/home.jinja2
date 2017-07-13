@@ -18,7 +18,7 @@
                         </div>
 
                         <a class="section hvr-sweep-to-right"
-                           href="{{ ep_url('article_index_by_section', {'term_alias': article.section.alias}) }}">{{ article.section.title | e }}</a>
+                           href="{{ rule_url('article_index_by_section', {'term_alias': article.section.alias}) }}">{{ article.section.title | e }}</a>
                     </div>
                 </div>
                 <div class="clearfix"></div>
@@ -31,7 +31,7 @@
                                     {{ article.images[0].get_responsive_html(article.title, aspect_ratio=1.5) }}
                                 </a>
                                 <a class="section hvr-sweep-to-right"
-                                   href="{{ ep_url('article_index_by_section', {'term_alias': article.section.alias}) }}">{{ article.section.title | e }}</a>
+                                   href="{{ rule_url('article_index_by_section', {'term_alias': article.section.alias}) }}">{{ article.section.title | e }}</a>
 
                                 <p class="title"><a href="{{ article.url }}">{{ article.title | e }}</a></p>
                             </div>
@@ -49,7 +49,7 @@
                 <div class="row latest-by-section">
                     <div class="col-xs-12 section-title">
                         <h3>{{ section.title | e }}</h3>
-                        <a href="{{ ep_url('article_index_by_section', {'term_alias': section.alias}) }}" class="read-all">
+                        <a href="{{ rule_url('article_index_by_section', {'term_alias': section.alias}) }}" class="read-all">
                             {{ t('all_articles_of_section') }}
                         </a>
                     </div>

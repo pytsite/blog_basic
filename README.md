@@ -1,3 +1,6 @@
-# PytSite Blog Default Theme
+# PytSite Basic Blog Theme
 
-Default theme for [PytSite Blog](https://github.com/pytsite/blog).
+Basic theme for [PytSite Blog](https://github.com/pytsite-apps/blog).
+
+* Author: [Alexander Shepetko](https://shepetko.com)
+* URL: https://github.com/pytsite-themes/blog-basic
