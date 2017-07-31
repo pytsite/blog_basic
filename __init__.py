@@ -1,13 +1,13 @@
 """Orange Theme for PytSite Blog Application
 """
-from pytsite import pkg_util, tpl, widget, assetman, plugman, router
+from pytsite import package_info, tpl, widget, assetman, plugman, router
 
 __author__ = 'Alexander Shepetko'
 __email__ = 'a@shepetko.com'
 __license__ = 'MIT'
 
 # Check for Blog application presence
-if pkg_util.name('app') != 'blog':
+if package_info.name('app') != 'blog':
     raise RuntimeError('This theme is able to work only with PytSite Blog application. '
                        'See https://github.com/pytsite/blog for details.')
 
