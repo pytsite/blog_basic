@@ -1,8 +1,8 @@
 {
-  "name": "blog-basic",
+  "name": "blog_basic",
   "description": "Basic Blog",
   "author": "Alexander Shepetko <a@shepetko.com>",
-  "url": "https://github.com/pytsite-themes/blog-basic",
+  "url": "https://github.com/pytsite-themes/blog_basic",
   "requires": "pytsite>=2.0",
   "version": "2.0"
 }
