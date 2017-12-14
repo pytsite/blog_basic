@@ -1,7 +1,7 @@
 <div class="navbar navbar-bottom">
     <div class="container">
         <ul class="links nav navbar-nav">
-            {% for link in settings_get('app.links', ()) %}
+            {% for link in reg_get('app.links', ()) %}
                 {% set icon = 'globe' %}
                 {% if 'facebook.com' in link %}
                     {% set icon = 'facebook' %}
@@ -19,7 +19,7 @@
                 <li><a target="_blank" href="{{ link }}"><i class="fa fa-fw fa-{{ icon }}"></i></a></li>
             {% endfor %}
 
-            <li><a href="mailto:{{ settings_get('mail.from') }}"><i class="fa fa-envelope"></i></a></li>
+            <li><a href="mailto:{{ reg_get('mail.from') }}"><i class="fa fa-envelope"></i></a></li>
 
             {% for page in content_pages() %}
                 {{ nav_link(page.url, page.title) }}
